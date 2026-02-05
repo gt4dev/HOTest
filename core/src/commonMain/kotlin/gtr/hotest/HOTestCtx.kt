@@ -24,4 +24,8 @@ class HOTestCtx {
         }
         return items[key] as T
     }
+
+    fun containsKey(key: String): Boolean {
+        return items.containsKey(key)
+    }
 }

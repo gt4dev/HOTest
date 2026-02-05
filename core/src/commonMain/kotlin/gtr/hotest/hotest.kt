@@ -2,7 +2,7 @@ package gtr.hotest
 
 import gtr.hotest.variants.VariantsRuntime
 
-// `fun hotest` and `fun hotestAsync` differ ONLY by the `suspend` keyword.
+// `fun hotest..` and `object Async {fun hotest ..}` differ ONLY by the `suspend` keyword.
 // WHEN MODIFYING ANY OF THESE FUNCTIONS, MAKE SURE BOTH ARE UPDATED!
 // BTW. eliminating this duplication would make the code messier than the duplication itself.
 
