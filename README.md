@@ -20,7 +20,7 @@ You write scenarios in human-friendly language, but still in code, which keeps t
 Sample test:
 ```kotlin
 @Test
-fun `exchange currencies - direct rate use`() = runTest {
+fun `exchange currencies - direct rate use`() {
     hotest {
         `when exchange calculator converts`(
             Money(10, "EUR"),
@@ -33,7 +33,7 @@ fun `exchange currencies - direct rate use`() = runTest {
 }
 
 @Test
-fun `exchange currencies - reversed rate use`() = runTest {
+fun `exchange currencies - reversed rate use`() {
     hotest {
         `when exchange calculator converts`(
             Money(40, "PLN"),
@@ -145,8 +145,10 @@ hotest {
 
 # Others
 
-**Real usage example**
+### Real usage example  
+
 Instruction on how to set up your project to use HOTest and real-world scenarios you can find in associated project [Multi Project Focus](https://github.com/gt4dev/MultiProjectFocus)
 
-**When Not to Use HOTest**
-- When tests must verify low-level implementation details or exact API calls.
+### When Not to Use HOTest
+When tests must verify low-level implementation details or exact API calls.
+It's worth using HOTest when you have pure business requirements.
