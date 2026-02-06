@@ -1,52 +1,46 @@
 package gtr.hotest
 
 import gtr.hotest.variants.VariantsRuntime
-
-// `fun hotest..` and `object Async {fun hotest ..}` differ ONLY by the `suspend` keyword.
-// WHEN MODIFYING ANY OF THESE FUNCTIONS, MAKE SURE BOTH ARE UPDATED!
-// BTW. eliminating this duplication would make the code messier than the duplication itself.
+import kotlinx.coroutines.runBlocking
 
 fun hotest(
-    hotestCtx: HOTestCtx = HOTestCtx(),
+    beforeTest: () -> HOTestCtx = { HOTestCtx() },
+    afterTest: (HOTestCtx) -> Unit = {},
     testBody: HOTestCtx.() -> Unit
-): HOTestCtx {
-    val runtime = VariantsRuntime()
-    val previousRuntime = hotestCtx.variantsRuntime
-    hotestCtx.variantsRuntime = runtime
-    runtime.resetForHotest()
-
-    try {
-        while (runtime.hasPendingRuns()) {
-            val selection = runtime.nextSelection()
-            runtime.startRun(selection)
-            hotestCtx.testBody()
-        }
-        return hotestCtx
-    } finally {
-        hotestCtx.variantsRuntime = previousRuntime
-    }
+): HOTestCtx = runBlocking {
+    Async.hotest(beforeTest, afterTest) { testBody() }
 }
 
 object Async {
 
     suspend fun hotest(
-        hotestCtx: HOTestCtx = HOTestCtx(),
+        // beforeTest - creates HOTestCtx, called on each start of the 'test loop'
+        beforeTest: () -> HOTestCtx = { HOTestCtx() },
+        // afterTest - called on each end of the 'test loop'
+        afterTest: (HOTestCtx) -> Unit = {},
         testBody: suspend HOTestCtx.() -> Unit
     ): HOTestCtx {
         val runtime = VariantsRuntime()
-        val previousRuntime = hotestCtx.variantsRuntime
-        hotestCtx.variantsRuntime = runtime
         runtime.resetForHotest()
+        var lastCtx: HOTestCtx? = null
 
-        try {
-            while (runtime.hasPendingRuns()) {
-                val selection = runtime.nextSelection()
-                runtime.startRun(selection)
+        while (runtime.hasPendingRuns()) {
+            val selection = runtime.nextSelection()
+            runtime.startRun(selection)
+            val hotestCtx = beforeTest()
+            val previousRuntime = hotestCtx.variantsRuntime
+            hotestCtx.variantsRuntime = runtime
+            lastCtx = hotestCtx
+            try {
                 hotestCtx.testBody()
+            } finally {
+                try {
+                    afterTest(hotestCtx)
+                } finally {
+                    hotestCtx.variantsRuntime = previousRuntime
+                }
             }
-            return hotestCtx
-        } finally {
-            hotestCtx.variantsRuntime = previousRuntime
         }
+        return requireNotNull(lastCtx)
     }
 }

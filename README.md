@@ -22,6 +22,11 @@ Sample test:
 @Test
 fun `exchange currencies - direct rate use`() {
     hotest {
+        `given fake rates service returns`(
+            ExchangeRate("EUR", "PLN", 4),
+            ExchangeRate("EUR", "CHF", 2),
+            ExchangeRate("EUR", "USD", 1),
+        )
         `when exchange calculator converts`(
             Money(10, "EUR"),
             Currency.PLN
@@ -35,6 +40,11 @@ fun `exchange currencies - direct rate use`() {
 @Test
 fun `exchange currencies - reversed rate use`() {
     hotest {
+        `given fake rates service returns`(
+            ExchangeRate("EUR", "PLN", 4),
+            ExchangeRate("EUR", "CHF", 2),
+            ExchangeRate("EUR", "USD", 1),
+        )
         `when exchange calculator converts`(
             Money(40, "PLN"),
             Currency.EUR
