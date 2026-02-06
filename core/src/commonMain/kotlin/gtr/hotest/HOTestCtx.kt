@@ -29,3 +29,12 @@ class HOTestCtx {
         return items.containsKey(key)
     }
 }
+
+
+fun setupHotestCtx(
+    hc: HOTestCtx = HOTestCtx(),
+    setup: HOTestCtx.() -> Unit
+): HOTestCtx {
+    hc.setup()
+    return hc
+}
