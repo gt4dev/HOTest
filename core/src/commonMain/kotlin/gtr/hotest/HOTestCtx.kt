@@ -11,7 +11,7 @@ class HOTestCtx {
 
     operator fun <T> set(key: String, value: T) {
         if (items.containsKey(key)) {
-            // forbid "map" modification - it simplifies code
+            // forbid "map" modification - IT'S CRUCIAL for tests stability!!!
             throw IllegalArgumentException("key $key already exists")
         }
         items[key] = value as Any
