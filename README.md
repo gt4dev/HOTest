@@ -1,19 +1,36 @@
-# HOTest = Human Oriented Tests
+# HOTest = Human Oriented Tests  
+
+*NOTE: HOTest is under heavy development.*  
+*The library implementation is at an early stage and the API is changing, but the pattern is stable.*
 
 ## Introduction
 
 HOTest is a testing pattern and library that blends Gherkin-like readability with xUnit-style tests.  
-You write scenarios in human-friendly language, but still in code, which keeps tests close to the implementation while avoiding tight coupling of tests and production.
+You write scenarios in human-friendly language, but still in code, which keeps tests close to the implementation while avoiding tight coupling of tests and production.  
 
-**NOTE: HOTest is under heavy development:**
-- the implementation is at an early stage and the API is changing,
-- the concept is stable.
+### Main HOTest traits
+- Focus on creating human-readable tests. 
+- Reusable test steps make writing tests much easier.
 
-**Why HOTest**
-- Tests read like business scenarios, not implementation calls.
-- Reusable steps speed up writing new test scenarios.
-- Loose coupling between tests and production code reduces the freezing of production code evolution.
-- Clear architecture through separation between what should happen (test intent) and how it happens (production implementation).
+
+### Why use HOTest
+- Business rules are expressed in the most human-friendly way, with minimal technical details.
+- Readability of tests / specification has the highest priority.
+- Readable specification / tests:
+  - make changes in business logic easier
+  - enable better understanding of business opportunities, leading to evolution.
+- In HOTest, business logic is the top priority; implementation is a technical detail.
+  - You can truly start with tests (TDD) or specification (BDD) and later derive production code from it.
+- Loose coupling between tests and production code prevents architecture from becoming rigid.
+  - You can change architecture of the solution, even shift programming paradigms, still keeping business rules untouched.
+  - You can easily change implementation details without changing business rules.
+- Clearer architecture through separation between what should happen (test) and how it happens (production code).
+- Reusable steps speed up writing new scenarios and make exploring many variants of a scenario easier.
+
+### When Not to Use HOTest  
+When tests must verify low-level implementation details or exact API calls.  
+It's worth using HOTest only when you have human-readable business requirements.
+
 
 ## Quick Start Example  
 
@@ -56,15 +73,13 @@ fun `exchange currencies - reversed rate use`() {
 }
 ```
 
-You can find details in the project `MultiProjectFocus` sources.
-
 Notes about the example: 
 - Steps express intent, not implementation. Tests say what should happen, not which methods to call.
 - Steps use human-language names (Gherkin-style `given / when / then`), are reusable, and easy to read.
-- Steps are called inside `hotest {}` which set up scenario context between steps.
-- The test uses a classic `@Test` starter.
+- Steps are called inside `hotest {}`, which sets up scenario context between steps.
+- The test uses a standard `@Test` annotation.
 
-Note that **ANY** tests framework can run HOTest scenarios: JUnit, Kotest, Kotlin test, etc.
+**Any test** framework can run HOTest scenarios: JUnit, Kotest, Kotlin test, etc.
 
 Sample step definition:
 ```kotlin
@@ -75,8 +90,8 @@ fun HOTestCtx.`then exchange calculator returns`(
     Assertions.moneyEquals(money, result)
 }
 ```
-Note that to keep context between step calls - all steps use `HOTestCtx`.  
-In `HOTestCtx` are kept SUT objects and all data required by test scenario and passed between steps.
+To keep context between step calls, all steps use `HOTestCtx`.  
+`HOTestCtx` stores SUT objects and all data required by the scenario and shared between steps.
 
 ## Test Scenario Variants  
 `variants {}` reduce boilerplate when you want several scenario variations without duplicating shared parts.
@@ -118,9 +133,9 @@ step on end
 ```
 
 **Rules for using variants**
-1. You can define any number of `variant` inside a `variants` block.
+1. You can define any number of `variant {}` blocks inside a `variants {}` block.
 1. Only one `variants` block is allowed at a given test level.
-1. `variants` can be nested inside other `variants` blocks - like shown here:
+1. `variants` can be nested inside other `variants` blocks, as shown below:
 
 ```kotlin
 // example of nested variants
@@ -153,12 +168,9 @@ hotest {
 }
 ```
 
-# Others
+## Real usage example
+For advanced, full examples of HOTest usage, refer to the [Multi Project Focus](https://github.com/gt4dev/MultiProjectFocus) project.  
 
-### Real usage example  
-
-Instruction on how to set up your project to use HOTest and real-world scenarios you can find in associated project [Multi Project Focus](https://github.com/gt4dev/MultiProjectFocus)
-
-### When Not to Use HOTest
-When tests must verify low-level implementation details or exact API calls.
-It's worth using HOTest when you have pure business requirements.
+1. Sample tests: [main/composeApp/src/commonTest](https://github.com/gt4dev/MultiProjectFocus/tree/main/composeApp/src/commonTest/kotlin/gtr/mpfocus)    
+1. HOTest integration with your project:  
+   Temporary integration uses [Gradle composite build](https://github.com/gt4dev/MultiProjectFocus/blob/main/settings.gradle.kts).
