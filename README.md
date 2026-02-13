@@ -9,17 +9,17 @@ HOTest is a testing pattern and library that blends Gherkin-like readability wit
 You write scenarios in human-friendly language, but still in code, which keeps tests close to the implementation while avoiding tight coupling of tests and production.  
 
 ### Main HOTest traits
-- Focus on creating human-readable tests. 
+- Focus on creating human-readable tests but still in Kotlin. 
 - Reusable test steps make writing tests much easier.
 
 
 ### Why use HOTest
 - Business rules are expressed in the most human-friendly way, with minimal technical details.
-- Readability of tests / specification has the highest priority.
+- Readability of specification / tests have the highest priority.
 - Readable specification / tests:
   - make changes in business logic easier
-  - enable better understanding of business opportunities, leading to evolution.
-- In HOTest, business logic is the top priority; implementation is a technical detail.
+  - enable better understanding of business opportunities, leading to business evolutions.
+- In HOTest, business logic is the top driver; implementation is a technical detail.
   - You can truly start with tests (TDD) or specification (BDD) and later derive production code from it.
 - Loose coupling between tests and production code prevents architecture from becoming rigid.
   - You can change architecture of the solution, even shift programming paradigms, still keeping business rules untouched.
@@ -76,7 +76,7 @@ fun `exchange currencies - reversed rate use`() {
 Notes about the example: 
 - Steps express intent, not implementation. Tests say what should happen, not which methods to call.
 - Steps use human-language names (Gherkin-style `given / when / then`), are reusable, and easy to read.
-- Steps are called inside `hotest {}`, which sets up scenario context between steps.
+- Steps are called inside `hotest {}`, which sets up shared scenario context between steps.
 - The test uses a standard `@Test` annotation.
 
 **Any test** framework can run HOTest scenarios: JUnit, Kotest, Kotlin test, etc.
@@ -90,7 +90,7 @@ fun HOTestCtx.`then exchange calculator returns`(
     Assertions.moneyEquals(money, result)
 }
 ```
-To keep context between step calls, all steps use `HOTestCtx`.  
+To keep context between step calls, all steps are called in the same context `HOTestCtx`.  
 `HOTestCtx` stores SUT objects and all data required by the scenario and shared between steps.
 
 ## Test Scenario Variants  
@@ -114,7 +114,7 @@ hotest {
 }
 ```
 
-Expected output:
+Output:
 ```text
 // 1st loop
 step on start
@@ -131,6 +131,7 @@ step on start
 variant3
 step on end
 ```
+Each variant causes new execution of whole test but with only this particular variant.
 
 **Rules for using variants**
 1. You can define any number of `variant {}` blocks inside a `variants {}` block.
