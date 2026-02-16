@@ -17,7 +17,7 @@ class KoinContextTest {
             variants {
 
                 variant("many 'adds' in one call") {
-                    addToKoinTestModule {
+                    koinAdd {
                         single(named("name1")) { "sample text 1" }
                         single(named("name2")) { "sample text 2" }
                         single(named("name3")) { "sample text 3" }
@@ -32,12 +32,12 @@ class KoinContextTest {
                 }
 
                 variant("many 'adds' in many calls") {
-                    addToKoinTestModule {
+                    koinAdd {
                         single(named("callA name1")) { "callA sample text 1" }
                         single(named("callA name2")) { "callA sample text 2" }
                     }
 
-                    addToKoinTestModule {
+                    koinAdd {
                         single(named("callB name1")) { "callB sample text 1" }
                         single(named("callB name2")) { "callB sample text 2" }
                     }
@@ -73,7 +73,7 @@ class KoinContextTest {
             variants {
 
                 variant("object already ready") {
-                    addToKoinTestModule {
+                    koinAdd {
                         single {
                             Person(
                                 name = "person 123",
@@ -93,7 +93,7 @@ class KoinContextTest {
                     variants {
 
                         variant("one call of 'addToKoinTestModule'") {
-                            addToKoinTestModule {
+                            koinAdd {
                                 factory {
                                     Person(
                                         name = "person AAA",
@@ -112,7 +112,7 @@ class KoinContextTest {
                         }
 
                         variant("many call of 'addToKoinTestModule'") {
-                            addToKoinTestModule {
+                            koinAdd {
                                 factory {
                                     Person(
                                         name = "person XXX",
@@ -120,7 +120,7 @@ class KoinContextTest {
                                     )
                                 }
                             }
-                            addToKoinTestModule {
+                            koinAdd {
                                 single {
                                     Address(
                                         country = "country 123",
@@ -144,7 +144,7 @@ class KoinContextTest {
             variants {
 
                 variant("lack of 'root object' definition (Person)") {
-                    addToKoinTestModule {
+                    koinAdd {
                         // no definitions
                     }
                     assertFailsWith<org.koin.core.error.NoDefinitionFoundException> {
@@ -154,7 +154,7 @@ class KoinContextTest {
                 }
 
                 variant("lack of 'dependent object' definition (Address)") {
-                    addToKoinTestModule {
+                    koinAdd {
                         factory {
                             Person(
                                 name = "person XXX",
@@ -170,7 +170,7 @@ class KoinContextTest {
 
                 variant("duplicated definition of 'root object' (Person)") {
                     assertFailsWith<org.koin.core.error.DefinitionOverrideException> {
-                        addToKoinTestModule {
+                        koinAdd {
                             factory {
                                 Person(
                                     name = "person XXX1",
@@ -190,7 +190,7 @@ class KoinContextTest {
                                 )
                             }
                         }
-                        addToKoinTestModule {
+                        koinAdd {
                             factory {  // n: this duplication crashes, because it's repeats above definition
                                 Person(
                                     name = "person XXX",
