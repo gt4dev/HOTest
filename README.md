@@ -9,14 +9,14 @@ HOTest is a testing pattern and library that blends Gherkin-like readability wit
 You write scenarios in human-friendly language, but still in code, which keeps tests close to the implementation while avoiding tight coupling of tests and production.  
 
 ### Main HOTest traits
-- Focus on creating human-readable tests but still in Kotlin. 
+- Focus on creating human-readable tests but still using a programming language (Kotlin). 
 - Reusable test steps make writing tests much easier.
 
 
 ### Why use HOTest
 - Business rules are expressed in the most human-friendly way, with minimal technical details.
 - Readability of specification / tests have the highest priority.
-- Readable specification / tests:
+- Readable specification / tests brings business advantages:
   - make changes in business logic easier
   - enable better understanding of business opportunities, leading to business evolutions.
 - In HOTest, business logic is the top driver; implementation is a technical detail.
@@ -94,44 +94,69 @@ To keep context between step calls, all steps are called in the same context `HO
 `HOTestCtx` stores SUT objects and all data required by the scenario and shared between steps.
 
 ## Test Scenario Variants  
-`variants {}` reduce boilerplate when you want several scenario variations without duplicating shared parts.
+`variants` is additional feature of HOTest that further increases test readability.  
+It allows you to clearly present different variants of the same test scenario by:  
+- explicitly showing scenario variants within the same scenario,
+- eliminating steps repetitions (which clutter tests without `variants`).
+
+**Example**
+```test
+@Test
+fun `example of variants`() {
+  hotest {
+  
+    `first step - it runs always as 1st for all variants`()
+
+    variants {
+
+      variant {
+        `this step runs only for this variant`()
+        `this step also runs only here`()
+      }
+
+      variant {
+        `this specialized step runs only in this variant`()
+        `and another step - without repeating common boilerplate`()
+      }
+
+      variant {
+        `and this runs only here`
+      }
+    }
+
+    `final step - it runs on finish of each variant`()
+  }
+}
+```
+
+Steps execution odrer:
+```text
+// loop 1
+first step - it runs always as 1st for all variants
+this step runs only for this variant
+this step also runs only here
+final step - it runs on finish of each variant
+
+// loop 2
+first step - it runs always as 1st for all variants
+this specialized step runs only in this variant
+and another step - without repeating common boilerplate
+final step - it runs on finish of each variant
+
+// loop 3
+first step - it runs always as 1st for all variants
+and this runs only he
+final step - it runs on finish of each variant
+```
+Each variant causes new execution of whole test but with only this particular variant.
+
+For real world example look check [test in this project](https://github.com/gt4dev/MultiProjectFocus/blob/main/composeApp/src/commonTest/kotlin/gtr/mpfocus/domain/model/core/PinnedProjectOpenFolderTest.kt).
 
 **How variants execute**
 - `variants {}` defines a block with multiple `variant {}` branches.
 - Each `variant {}` is executed in a separate run of the surrounding test.
 - Traversal order follows depth-first search (graph's DFS algorithm) through nested variants.
 
-**Example**
-```kotlin
-hotest {
-    println("step on start")
-    variants {
-        variant { println("variant1") }
-        variant { println("variant2") }
-        variant { println("variant3") }
-    }
-    println("step on end")
-}
-```
-
-Output:
-```text
-// 1st loop
-step on start
-variant1
-step on end
-
-// 2nd loop
-step on start
-variant2
-step on end
-
-// 3rd loop
-step on start
-variant3
-step on end
-```
-Each variant causes new execution of whole test but with only this particular variant.
 
 **Rules for using variants**
 1. You can define any number of `variant {}` blocks inside a `variants {}` block.
