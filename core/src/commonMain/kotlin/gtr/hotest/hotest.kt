@@ -4,21 +4,21 @@ import gtr.hotest.variants.VariantsRuntime
 import kotlinx.coroutines.runBlocking
 
 fun hotest(
-    beforeTest: () -> HOTestCtx = { HOTestCtx() },
-    afterTest: (HOTestCtx) -> Unit = {},
-    testBody: HOTestCtx.() -> Unit
+    createCtx: () -> HOTestCtx = { HOTestCtx() },
+    beforeTest: HOTestCtx.() -> Unit = {},
+    afterTest: HOTestCtx.() -> Unit = {},
+    testBody: HOTestCtx.() -> Unit = {}
 ): HOTestCtx = runBlocking {
-    Async.hotest(beforeTest, afterTest) { testBody() }
+    Async.hotest(createCtx, beforeTest, afterTest, testBody)
 }
 
 object Async {
 
     suspend fun hotest(
-        // beforeTest - creates HOTestCtx, called on each start of the 'test loop'
-        beforeTest: () -> HOTestCtx = { HOTestCtx() },
-        // afterTest - called on each end of the 'test loop'
-        afterTest: (HOTestCtx) -> Unit = {},
-        testBody: suspend HOTestCtx.() -> Unit
+        createCtx: suspend () -> HOTestCtx = { HOTestCtx() },
+        beforeTest: suspend HOTestCtx.() -> Unit = {},
+        afterTest: suspend HOTestCtx.() -> Unit = {},
+        testBody: suspend HOTestCtx.() -> Unit = {}
     ): HOTestCtx {
         val runtime = VariantsRuntime()
         runtime.resetForHotest()
@@ -27,7 +27,8 @@ object Async {
         while (runtime.hasPendingRuns()) {
             val selection = runtime.nextSelection()
             runtime.startRun(selection)
-            val hotestCtx = beforeTest()
+            val hotestCtx = createCtx()
+            hotestCtx.beforeTest()
             val previousRuntime = hotestCtx.variantsRuntime
             hotestCtx.variantsRuntime = runtime
             lastCtx = hotestCtx
@@ -35,7 +36,7 @@ object Async {
                 hotestCtx.testBody()
             } finally {
                 try {
-                    afterTest(hotestCtx)
+                    hotestCtx.afterTest()
                 } finally {
                     hotestCtx.variantsRuntime = previousRuntime
                 }
