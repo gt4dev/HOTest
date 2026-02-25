@@ -1,19 +1,22 @@
 # HOTest = Human Oriented Tests  
 
-*NOTE: HOTest is under heavy development.*  
-*The library implementation is at an early stage and the API is changing, but the pattern is stable.*
+## Table of Contents
+- [Introduction](#introduction)
+- [Quick Example](#quick-example)
+- [Test Scenario Variants](#test-scenario-variants)
+- [Usage](#usage)
 
-## Introduction
+# Introduction
 
 HOTest is a testing pattern and library that blends Gherkin-like readability with xUnit-style tests.  
 You write scenarios in human-friendly language, but still in code, which keeps tests close to the implementation while avoiding tight coupling of tests and production.  
 
-### Main HOTest traits
+## Main HOTest traits
 - Focus on creating human-readable tests but still using a programming language (Kotlin). 
 - Reusable test steps make writing tests much easier.
 
 
-### Why use HOTest
+## Why use HOTest
 - Business rules are expressed in the most human-friendly way, with minimal technical details.
 - Readability of specification / tests have the highest priority.
 - Readable specification / tests brings business advantages:
@@ -27,12 +30,12 @@ You write scenarios in human-friendly language, but still in code, which keeps t
 - Clearer architecture through separation between what should happen (test) and how it happens (production code).
 - Reusable steps speed up writing new scenarios and make exploring many variants of a scenario easier.
 
-### When Not to Use HOTest  
+## When Not to Use HOTest  
 When tests must verify low-level implementation details or exact API calls.  
 It's worth using HOTest only when you have human-readable business requirements.
 
 
-## Quick Start Example  
+# Quick Example
 
 Sample test:
 ```kotlin
@@ -86,21 +89,23 @@ Sample step definition:
 fun HOTestCtx.`then exchange calculator returns`(
     money: Models.Money,
 ) {
-    val result: Money = this[KEY_RESULTS]
+    val result: Money = this.koin.get()
     Assertions.moneyEquals(money, result)
 }
 ```
 To keep context between step calls, all steps are called in the same context `HOTestCtx`.  
 `HOTestCtx` stores SUT objects and all data required by the scenario and shared between steps.
 
-## Test Scenario Variants  
+
+# Test Scenario Variants  
+
 `variants` is additional feature of HOTest that further increases test readability.  
 It allows you to clearly present different variants of the same test scenario by:  
 - explicitly showing scenario variants within the same scenario,
 - eliminating steps repetitions (which clutter tests without `variants`).
 
 **Example**
-```test
+```kotlin
 @Test
 fun `example of variants`() {
   hotest {
@@ -130,7 +135,7 @@ fun `example of variants`() {
 ```
 
 Steps execution odrer:
-```text
+```console
 // loop 1
 first step - it runs always as 1st for all variants
 this step runs only for this variant
@@ -194,9 +199,12 @@ hotest {
 }
 ```
 
-## Real usage example
-For advanced, full examples of HOTest usage, refer to the [Multi Project Focus](https://github.com/gt4dev/MultiProjectFocus) project.  
+# Usage
 
-1. Sample tests: [main/composeApp/src/commonTest](https://github.com/gt4dev/MultiProjectFocus/tree/main/composeApp/src/commonTest/kotlin/gtr/mpfocus)    
-1. HOTest integration with your project:  
-   Temporary integration uses [Gradle composite build](https://github.com/gt4dev/MultiProjectFocus/blob/main/settings.gradle.kts).
+For full examples of HOTest usage, refer to the [Multi Project Focus](https://github.com/gt4dev/MultiProjectFocus) project.  
+
+1. Installation
+    ```text
+    implementation("io.github.gt4dev:hotest:0.3.0")
+    ```
+1. Sample real tests: [main/composeApp/src/commonTest](https://github.com/gt4dev/MultiProjectFocus/tree/main/composeApp/src/commonTest/kotlin/gtr/mpfocus)    

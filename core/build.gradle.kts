@@ -3,8 +3,8 @@ plugins {
     alias(libs.plugins.vanniktech.mavenPublish)
 }
 
-group = "gtr.hotest"
-version = "0.2.0-SNAPSHOT"
+group = "io.github.gt4dev"
+version = "0.3.0"
 
 kotlin {
     jvm()
@@ -29,31 +29,32 @@ mavenPublishing {
 
     signAllPublications()
 
-    coordinates(group.toString(), "library", version.toString())
+    coordinates(group.toString(), "hotest", version.toString())
 
     pom {
-        name = "My library"
-        description = "A library."
-        inceptionYear = "2024"
-        url = "https://github.com/kotlin/multiplatform-library-template/"
+        name = "HOTest"
+        description =
+            "HOTest = Human Oriented Tests. Library help to create automated tests easy to read & write for humans. It simplify testing, enable TDD, BDD..."
+        inceptionYear = "2026"
+        url = "https://github.com/gt4dev/HOTest/"
         licenses {
             license {
-                name = "XXX"
-                url = "YYY"
-                distribution = "ZZZ"
+                name = "The Apache License, Version 2.0"
+                url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+                distribution = "https://www.apache.org/licenses/LICENSE-2.0.txt"
             }
         }
         developers {
             developer {
-                id = "XXX"
-                name = "YYY"
-                url = "ZZZ"
+                id = "gt4dev"
+                name = "Kotlin Developer Advocate"
+                url = "https://github.com/gt4dev/"
             }
         }
         scm {
-            url = "XXX"
-            connection = "YYY"
-            developerConnection = "ZZZ"
+            url = "https://github.com/gt4dev/HOTest/"
+            connection = "scm:git:git://github.com/gt4dev/HOTest.git"
+            developerConnection = "scm:git:ssh://git@github.com/gt4dev/HOTest.git"
         }
     }
 }
