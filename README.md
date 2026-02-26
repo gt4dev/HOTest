@@ -1,6 +1,7 @@
-# HOTest = Human Oriented Tests  
+# HOTest = Human Oriented Tests
 
 ## Table of Contents
+
 - [Introduction](#introduction)
 - [Quick Example](#quick-example)
 - [Test Scenario Variants](#test-scenario-variants)
@@ -9,35 +10,39 @@
 # Introduction
 
 HOTest is a testing pattern and library that blends Gherkin-like readability with xUnit-style tests.  
-You write scenarios in human-friendly language, but still in code, which keeps tests close to the implementation while avoiding tight coupling of tests and production.  
+You write scenarios in human-friendly language, but still in code, which keeps tests close to the implementation while
+avoiding tight coupling of tests and production.
 
 ## Main HOTest traits
-- Focus on creating human-readable tests but still using a programming language (Kotlin). 
+
+- Focus on creating human-readable tests but still using a programming language (Kotlin).
 - Reusable test steps make writing tests much easier.
 
-
 ## Why use HOTest
+
 - Business rules are expressed in the most human-friendly way, with minimal technical details.
 - Readability of specification / tests have the highest priority.
 - Readable specification / tests brings business advantages:
-  - make changes in business logic easier
-  - enable better understanding of business opportunities, leading to business evolutions.
+    - make changes in business logic easier
+    - enable better understanding of business opportunities, leading to business evolutions.
 - In HOTest, business logic is the top driver; implementation is a technical detail.
-  - You can truly start with tests (TDD) or specification (BDD) and later derive production code from it.
+    - You can truly start with tests (TDD) or specification (BDD) and later derive production code from it.
 - Loose coupling between tests and production code prevents architecture from becoming rigid.
-  - You can change architecture of the solution, even shift programming paradigms, still keeping business rules untouched.
-  - You can easily change implementation details without changing business rules.
+    - You can change architecture of the solution, even shift programming paradigms, still keeping business rules
+      untouched.
+    - You can easily change implementation details without changing business rules.
 - Clearer architecture through separation between what should happen (test) and how it happens (production code).
 - Reusable steps speed up writing new scenarios and make exploring many variants of a scenario easier.
 
-## When Not to Use HOTest  
+## When Not to Use HOTest
+
 When tests must verify low-level implementation details or exact API calls.  
 It's worth using HOTest only when you have human-readable business requirements.
-
 
 # Quick Example
 
 Sample test:
+
 ```kotlin
 @Test
 fun `exchange currencies - direct rate use`() {
@@ -76,7 +81,8 @@ fun `exchange currencies - reversed rate use`() {
 }
 ```
 
-Notes about the example: 
+Notes about the example:
+
 - Steps express intent, not implementation. Tests say what should happen, not which methods to call.
 - Steps use human-language names (Gherkin-style `given / when / then`), are reusable, and easy to read.
 - Steps are called inside `hotest {}`, which sets up shared scenario context between steps.
@@ -85,6 +91,7 @@ Notes about the example:
 **Any test** framework can run HOTest scenarios: JUnit, Kotest, Kotlin test, etc.
 
 Sample step definition:
+
 ```kotlin
 fun HOTestCtx.`then exchange calculator returns`(
     money: Models.Money,
@@ -93,49 +100,52 @@ fun HOTestCtx.`then exchange calculator returns`(
     Assertions.moneyEquals(money, result)
 }
 ```
+
 To keep context between step calls, all steps are called in the same context `HOTestCtx`.  
 `HOTestCtx` stores SUT objects and all data required by the scenario and shared between steps.
 
-
-# Test Scenario Variants  
+# Test Scenario Variants
 
 `variants` is additional feature of HOTest that further increases test readability.  
-It allows you to clearly present different variants of the same test scenario by:  
+It allows you to clearly present different variants of the same test scenario by:
+
 - explicitly showing scenario variants within the same scenario,
 - eliminating steps repetitions (which clutter tests without `variants`).
 
 **Example**
+
 ```kotlin
 @Test
 fun `example of variants`() {
-  hotest {
-  
-    `first step - it runs always as 1st for all variants`()
+    hotest {
 
-    variants {
+        `first step - it runs always as 1st for all variants`()
 
-      variant {
-        `this step runs only for this variant`()
-        `this step also runs only here`()
-      }
+        variants {
 
-      variant {
-        `this specialized step runs only in this variant`()
-        `and another step - without repeating common boilerplate`()
-      }
+            variant {
+                `this step runs only for this variant`()
+                `this step also runs only here`()
+            }
 
-      variant {
-        `and this runs only here`
-      }
+            variant {
+                `this specialized step runs only in this variant`()
+                `and another step - without repeating common boilerplate`()
+            }
+
+            variant {
+                `and this runs only here`
+            }
+        }
+
+        `final step - it runs on finish of each variant`()
     }
-
-    `final step - it runs on finish of each variant`()
-  }
 }
 ```
 
 Steps execution odrer:
-```console
+
+```text
 // loop 1
 first step - it runs always as 1st for all variants
 this step runs only for this variant
@@ -153,17 +163,20 @@ first step - it runs always as 1st for all variants
 and this runs only he
 final step - it runs on finish of each variant
 ```
+
 Each variant causes new execution of whole test but with only this particular variant.
 
-For real world example look check [test in this project](https://github.com/gt4dev/MultiProjectFocus/blob/main/composeApp/src/commonTest/kotlin/gtr/mpfocus/domain/model/core/PinnedProjectOpenFolderTest.kt).
+For real world example look
+check [test in this project](https://github.com/gt4dev/MultiProjectFocus/blob/main/composeApp/src/commonTest/kotlin/gtr/mpfocus/domain/model/core/PinnedProjectOpenFolderTest.kt).
 
 **How variants execute**
+
 - `variants {}` defines a block with multiple `variant {}` branches.
 - Each `variant {}` is executed in a separate run of the surrounding test.
 - Traversal order follows depth-first search (graph's DFS algorithm) through nested variants.
 
-
 **Rules for using variants**
+
 1. You can define any number of `variant {}` blocks inside a `variants {}` block.
 1. Only one `variants` block is allowed at a given test level.
 1. `variants` can be nested inside other `variants` blocks, as shown below:
@@ -201,10 +214,35 @@ hotest {
 
 # Usage
 
-For full examples of HOTest usage, refer to the [Multi Project Focus](https://github.com/gt4dev/MultiProjectFocus) project.  
+## Installation
+- Make sure your project searches for dependencies in `mavenCentral()`.
+- Add the dependency:  
 
-1. Installation
-    ```text
-    implementation("io.github.gt4dev:hotest:0.3.0")
+  ```kotlin
+  // KMP projects
+  sourceSets {
+    commonTest.dependencies {
+      implementation("io.github.gt4dev:hotest:0.3.0")
+      ..
+  ```
+  ```kotlin
+  // JVM, Android projects
+  dependencies {
+    testImplementation("io.github.gt4dev:hotest:0.3.0")
+    ..
     ```
-1. Sample real tests: [main/composeApp/src/commonTest](https://github.com/gt4dev/MultiProjectFocus/tree/main/composeApp/src/commonTest/kotlin/gtr/mpfocus)    
+
+## Coding tests
+The way you write tests heavily depends on your project:
+- scenario style (eg: Given-When-Then or Arrange–Act–Assert)
+- scope of test (E2E, integration, unit/component)
+- what to mock, fake or stub
+- ... many more factors
+
+HOTest is agnostic about these details. It can be used in most cases.
+
+It is best to review real tests from [MultiProjectFocus project](https://github.com/gt4dev/MultiProjectFocus/tree/main/composeApp/src/commonTest/kotlin/gtr/mpfocus) and follow their concepts.  
+There are examples of using HOTest for:
+- testing pure business logic
+- testing [Room-based](https://developer.android.com/training/data-storage/room) repository
+- mocking with [Mokkery](https://mokkery.dev)
