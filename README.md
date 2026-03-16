@@ -222,14 +222,14 @@ hotest {
   // KMP projects
   sourceSets {
     commonTest.dependencies {
-      implementation("io.github.gt4dev:hotest:0.3.0")
-      ..
+      implementation("io.github.gt4dev:hotest:0.4.0")
+      // ..
   ```
   ```kotlin
   // JVM, Android projects
   dependencies {
-    testImplementation("io.github.gt4dev:hotest:0.3.0")
-    ..
+    testImplementation("io.github.gt4dev:hotest:0.4.0")
+    // ..
     ```
 
 ## Coding tests

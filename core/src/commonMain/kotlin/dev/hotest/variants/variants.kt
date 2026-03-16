@@ -1,6 +1,6 @@
-package gtr.hotest.variants
+package dev.hotest.variants
 
-import gtr.hotest.HOTestCtx
+import dev.hotest.HOTestCtx
 import kotlinx.coroutines.runBlocking
 
 fun HOTestCtx.variants(

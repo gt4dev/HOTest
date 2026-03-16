@@ -1,10 +1,10 @@
-package gtr.hotest
+package dev.hotest
 
-import gtr.hotest.BeforeAfterHooksTest.Fixtures.assertNoObjectInCtx
-import gtr.hotest.BeforeAfterHooksTest.Fixtures.assertObjectInCtx
-import gtr.hotest.BeforeAfterHooksTest.Fixtures.setObjectInCtx
-import gtr.hotest.variants.variant
-import gtr.hotest.variants.variants
+import dev.hotest.BeforeAfterHooksTest.Fixtures.assertNoObjectInCtx
+import dev.hotest.BeforeAfterHooksTest.Fixtures.assertObjectInCtx
+import dev.hotest.BeforeAfterHooksTest.Fixtures.setObjectInCtx
+import dev.hotest.variants.variant
+import dev.hotest.variants.variants
 import org.koin.core.qualifier.named
 import kotlin.test.Test
 import kotlin.test.assertEquals

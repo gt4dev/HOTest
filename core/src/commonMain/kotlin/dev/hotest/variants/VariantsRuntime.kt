@@ -1,4 +1,4 @@
-package gtr.hotest.variants
+package dev.hotest.variants
 
 internal class VariantsRuntime {
 

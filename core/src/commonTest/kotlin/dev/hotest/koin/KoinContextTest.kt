@@ -1,8 +1,11 @@
-package gtr.hotest.koin
+package dev.hotest.koin
 
-import gtr.hotest.hotest
-import gtr.hotest.variants.variant
-import gtr.hotest.variants.variants
+import dev.hotest.hotest
+import dev.hotest.variants.variant
+import dev.hotest.variants.variants
+import org.koin.core.error.DefinitionOverrideException
+import org.koin.core.error.InstanceCreationException
+import org.koin.core.error.NoDefinitionFoundException
 import org.koin.core.qualifier.named
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -147,7 +150,7 @@ class KoinContextTest {
                     koinAdd {
                         // no definitions
                     }
-                    assertFailsWith<org.koin.core.error.NoDefinitionFoundException> {
+                    assertFailsWith<NoDefinitionFoundException> {
                         val person: Person = koin.get()
                         person.toString()
                     }
@@ -162,14 +165,14 @@ class KoinContextTest {
                             )
                         }
                     }
-                    assertFailsWith<org.koin.core.error.InstanceCreationException> {
+                    assertFailsWith<InstanceCreationException> {
                         val person: Person = koin.get()
                         person.toString()
                     }
                 }
 
                 variant("duplicated definition of 'root object' (Person)") {
-                    assertFailsWith<org.koin.core.error.DefinitionOverrideException> {
+                    assertFailsWith<DefinitionOverrideException> {
                         koinAdd {
                             factory {
                                 Person(

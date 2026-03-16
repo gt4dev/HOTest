@@ -1,6 +1,6 @@
-package gtr.hotest
+package dev.hotest
 
-import gtr.hotest.variants.VariantsRuntime
+import dev.hotest.variants.VariantsRuntime
 import org.koin.core.Koin
 import org.koin.core.module.Module
 import org.koin.dsl.koinApplication

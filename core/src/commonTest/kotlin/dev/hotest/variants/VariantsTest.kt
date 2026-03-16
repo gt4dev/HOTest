@@ -1,6 +1,6 @@
-package gtr.hotest.variants
+package dev.hotest.variants
 
-import gtr.hotest.hotest
+import dev.hotest.hotest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

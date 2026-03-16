@@ -1,6 +1,6 @@
-package gtr.hotest.variants
+package dev.hotest.variants
 
-import gtr.hotest.graphs.GraphTreeNode
+import dev.hotest.graphs.GraphTreeNode
 
 internal class VariantsTree {
 
