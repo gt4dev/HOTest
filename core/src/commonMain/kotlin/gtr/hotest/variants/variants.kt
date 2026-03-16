@@ -36,13 +36,12 @@ object Async {
             return
         }
 
-        val blockIndex = runtime.nextBlockIndex()
-        runtime.enterBlock(blockIndex)
+        runtime.enterGroup(comment)
         try {
             this.testBody()
         } finally {
-            val finished = runtime.exitBlock()
-            runtime.finishBlock(finished)
+            val finished = runtime.exitGroup()
+            runtime.finishGroup(finished)
         }
     }
 
@@ -52,16 +51,19 @@ object Async {
         testBody: suspend HOTestCtx.() -> Unit
     ) {
         val runtime = this.variantsRuntime
-        val ctx = runtime?.currentBlock()
-        if (ctx == null) {
+        val variantCtx = runtime?.registerVariant(comment)
+        if (variantCtx == null) {
             this.testBody()
             return
         }
 
-        val index = ctx.variantCount
-        ctx.variantCount += 1
-        if (index == ctx.chosenIndex) {
-            this.testBody()
+        if (variantCtx.shouldExecute) {
+            runtime.enterVariant(variantCtx.option)
+            try {
+                this.testBody()
+            } finally {
+                runtime.exitVariant()
+            }
         }
     }
 }

@@ -7,7 +7,7 @@ import kotlin.test.assertEquals
 class VariantsTest {
 
     @Test
-    fun variants_one_level___classic_case() {
+    fun `test simple case - variants with one level`() {
         val result = mutableListOf<String>()
         hotest {
             result.add("start")
@@ -31,7 +31,7 @@ class VariantsTest {
     }
 
     @Test
-    fun variants_one_level___empty_variants() {
+    fun `test empty 'variants' - without nested 'variant'`() {
         val result = mutableListOf<String>()
         hotest {
             result.add("start")
@@ -49,7 +49,7 @@ class VariantsTest {
     }
 
     @Test
-    fun variants_two_levels___classic_variants_tree() {
+    fun `test two levels variant - regular case`() {
         val result = mutableListOf<String>()
         hotest {
             result.add("start")
@@ -92,7 +92,7 @@ class VariantsTest {
     }
 
     @Test
-    fun variants_two_levels___variants_tree_with_one_child() {
+    fun `many 'variants' - each with nested 'variant'`() {
         val result = mutableListOf<String>()
         hotest {
             result.add("start")
@@ -124,9 +124,103 @@ class VariantsTest {
         assertEquals(expected, result)
     }
 
+    @Test
+    fun `variants with different number of nested siblings variants`() {
+        val result = mutableListOf<String>()
+        hotest {
+            result.add("start")
+            variants("vsA") {
+                variant("vsA-v1") {
+                    variants("vsB") {
+                        variant("vsB-v1") {
+                            result.add("vsB-v1")
+                        }
+                        variant("vsB-v2") {
+                            result.add("vsB-v2")
+                        }
+                    }
+                }
+                variant("vsA-v2") {
+                    variants("vsC") {
+                        variant("vsC-v1") {
+                            result.add("vsC-v1")
+                        }
+                    }
+                }
+            }
+            result.add("end")
+        }
+
+        val expected = listOf(
+            // loop 1
+            "start", "vsB-v1", "end",
+            // loop 2
+            "start", "vsB-v2", "end",
+            // loop 3
+            "start", "vsC-v1", "end",
+        )
+        assertEquals(expected, result)
+    }
 
     @Test
-    fun precise_travers_through_variants_tree() {
+    fun `test order of visiting nodes`() {
+        val result = mutableListOf<String>()
+        hotest {
+            result.add("start")
+            variants("A") {
+                variant("A1") {
+                    variants("B") {
+                        variant("B1") {
+                            result.add("B1")
+                        }
+                        variant("B2") {
+                            result.add("B2")
+                        }
+                    }
+                    variants("C") {
+                        variant("C1") {
+                            variants("E") {
+                                variant("E1") {
+                                    result.add("E1")
+                                }
+                                variant("E2") {
+                                    result.add("E2")
+                                }
+                            }
+                        }
+                        variant("C2") {
+                            result.add("C2")
+                        }
+                    }
+                }
+                variant("A2") {
+                    variants("D") {
+                        variant("D1") {
+                            result.add("D1")
+                        }
+                        variant("D2") {
+                            result.add("D2")
+                        }
+                    }
+                }
+            }
+        }
+
+        val expected = listOf(
+            "start", "B1",
+            "start", "B2",
+            "start", "E1",
+            "start", "E2",
+            "start", "C2",
+            "start", "D1",
+            "start", "D2",
+        )
+        assertEquals(expected, result)
+    }
+
+
+    @Test
+    fun `test precise traverse through complex variants tree`() {
         val result = mutableListOf<String>()
         hotest {
             result.add("start")
@@ -168,18 +262,20 @@ class VariantsTest {
             result.add("end")
         }
 
-        // distilled view on variants tree
-        // variants("vsA") {
-        //     variant("vsA-v1") {
-        //         variants("vsB") {
-        //             variant("vsB-v1") { }
-        //             variant("vsB-v2") { }
+        // variants tree:
+        // root {
+        //     variants("vsA") {
+        //         variant("vsA-v1") {
+        //             variants("vsB") {
+        //                 variant("vsB-v1") { }
+        //                 variant("vsB-v2") { }
+        //             }
         //         }
-        //     }
-        //     variant("vsA-v2") {
-        //         variants("vsC") {
-        //             variant("vsC-v1") { }
-        //             variant("vsC-v2") { }
+        //         variant("vsA-v2") {
+        //             variants("vsC") {
+        //                 variant("vsC-v1") { }
+        //                 variant("vsC-v2") { }
+        //             }
         //         }
         //     }
         // }

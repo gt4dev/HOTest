@@ -11,7 +11,7 @@ import kotlin.test.assertFailsWith
 class KoinContextTest {
 
     @Test
-    fun handle_simple_cases() {
+    fun `test simple object`() {
         hotest {
 
             variants {
@@ -68,7 +68,7 @@ class KoinContextTest {
 
 
     @Test
-    fun handle_complex_object_cases() {
+    fun `test complex object`() {
         hotest {
             variants {
 
@@ -138,7 +138,7 @@ class KoinContextTest {
     }
 
     @Test
-    fun handle_edge_cases() {
+    fun `test edge cases`() {
         hotest {
 
             variants {

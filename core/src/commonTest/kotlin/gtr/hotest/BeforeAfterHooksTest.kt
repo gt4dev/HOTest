@@ -33,7 +33,7 @@ class BeforeAfterHooksTest {
     }
 
     @Test
-    fun case_basic() {
+    fun `test basic usage`() {
         val actionsLog = mutableListOf<String>()
         hotest(
             beforeTest = {
@@ -57,7 +57,7 @@ class BeforeAfterHooksTest {
     }
 
     @Test
-    fun case_with_simple_variants() {
+    fun `test usage with variants`() {
         val actionsLog = mutableListOf<String>()
         hotest(
             beforeTest = {
@@ -90,7 +90,7 @@ class BeforeAfterHooksTest {
     }
 
     @Test
-    fun case_with_subvariants() {
+    fun `test usage with subvariants`() {
         val actionsLog = mutableListOf<String>()
         hotest(
             beforeTest = {

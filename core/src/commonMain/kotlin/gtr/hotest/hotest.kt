@@ -21,12 +21,11 @@ object Async {
         testBody: suspend HOTestCtx.() -> Unit = {}
     ): HOTestCtx {
         val runtime = VariantsRuntime()
-        runtime.resetForHotest()
+        runtime.reset()
         var lastCtx: HOTestCtx? = null
 
         while (runtime.hasPendingRuns()) {
-            val selection = runtime.nextSelection()
-            runtime.startRun(selection)
+            runtime.startRun()
             val hotestCtx = createCtx()
             hotestCtx.beforeTest()
             val previousRuntime = hotestCtx.variantsRuntime
@@ -39,6 +38,7 @@ object Async {
                     hotestCtx.afterTest()
                 } finally {
                     hotestCtx.variantsRuntime = previousRuntime
+                    runtime.finishRun()
                 }
             }
         }
