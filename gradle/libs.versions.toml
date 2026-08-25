@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.3.0"
+kotlin = "2.3.21"
 kotlinx-datetime = "0.7.1"
 kotlinx-coroutines = "1.10.2"
 vanniktechMavenPublish = "0.34.0"
