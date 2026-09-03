@@ -1,4 +1,4 @@
-package dev.hotest.graphs
+package dev.hotest.old_ver0.graphs
 
 internal class GraphTreeNode<T>(
     val value: T,

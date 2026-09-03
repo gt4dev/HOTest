@@ -1,6 +1,6 @@
-package dev.hotest.variants
+package dev.hotest.old_ver0.variants
 
-import dev.hotest.hotest
+import dev.hotest.old_ver0.hotest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

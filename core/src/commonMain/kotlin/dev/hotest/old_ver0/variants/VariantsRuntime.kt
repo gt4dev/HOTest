@@ -1,4 +1,4 @@
-package dev.hotest.variants
+package dev.hotest.old_ver0.variants
 
 internal class VariantsRuntime {
 

@@ -1,6 +1,6 @@
-package dev.hotest
+package dev.hotest.old_ver0
 
-import dev.hotest.variants.VariantsRuntime
+import dev.hotest.old_ver0.variants.VariantsRuntime
 import kotlinx.coroutines.runBlocking
 
 fun hotest(

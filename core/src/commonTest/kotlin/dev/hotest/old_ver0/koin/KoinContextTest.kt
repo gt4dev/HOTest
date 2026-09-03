@@ -1,8 +1,8 @@
-package dev.hotest.koin
+package dev.hotest.old_ver0.koin
 
-import dev.hotest.hotest
-import dev.hotest.variants.variant
-import dev.hotest.variants.variants
+import dev.hotest.old_ver0.hotest
+import dev.hotest.old_ver0.variants.variant
+import dev.hotest.old_ver0.variants.variants
 import org.koin.core.error.DefinitionOverrideException
 import org.koin.core.error.InstanceCreationException
 import org.koin.core.error.NoDefinitionFoundException

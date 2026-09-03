@@ -1,6 +1,6 @@
-package dev.hotest.variants
+package dev.hotest.old_ver0.variants
 
-import dev.hotest.graphs.GraphTreeNode
+import dev.hotest.old_ver0.graphs.GraphTreeNode
 
 internal class VariantsTree {
 

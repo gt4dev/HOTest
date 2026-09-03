@@ -1,10 +1,10 @@
-package dev.hotest
+package dev.hotest.old_ver0
 
-import dev.hotest.BeforeAfterHooksTest.Fixtures.assertNoObjectInCtx
-import dev.hotest.BeforeAfterHooksTest.Fixtures.assertObjectInCtx
-import dev.hotest.BeforeAfterHooksTest.Fixtures.setObjectInCtx
-import dev.hotest.variants.variant
-import dev.hotest.variants.variants
+import dev.hotest.old_ver0.BeforeAfterHooksTest.Fixtures.assertNoObjectInCtx
+import dev.hotest.old_ver0.BeforeAfterHooksTest.Fixtures.assertObjectInCtx
+import dev.hotest.old_ver0.BeforeAfterHooksTest.Fixtures.setObjectInCtx
+import dev.hotest.old_ver0.variants.variant
+import dev.hotest.old_ver0.variants.variants
 import org.koin.core.qualifier.named
 import kotlin.test.Test
 import kotlin.test.assertEquals
